@@ -25,8 +25,8 @@ public class ValidationService {
         Instant expiration=creation.plus(10, MINUTES);
         validation.setExpiration(expiration);
         Random random = new Random();
-        int randomInteger=random.nextInt(9999);
-        String code=String.format("%04d", randomInteger);
+        int randomInteger=random.nextInt(999999);
+        String code=String.format("%06d", randomInteger);
 
         validation.setCode(code);
         this.validationRepository.save(validation);
