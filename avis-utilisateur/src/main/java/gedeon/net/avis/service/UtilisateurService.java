@@ -3,11 +3,14 @@ package gedeon.net.avis.service;
 import gedeon.net.avis.TypeDeRole;
 import gedeon.net.avis.entite.Role;
 import gedeon.net.avis.entite.Utilisateur;
+import gedeon.net.avis.entite.Validation;
 import gedeon.net.avis.repository.UtilisateurRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -47,5 +50,15 @@ public class UtilisateurService {
 
         utilisateur= this.utilisateurRepository.save(utilisateur);
         this.validationService.enregistrer(utilisateur);
+    }
+
+    public void activation(Map<String,String> activation){
+        Validation validation=this.validationService.lireEnFonctionDuCode(activation.get("code"));
+        if (Instant.now().isAfter(validation.getExpiration())) {
+            throw new RuntimeException("votre code a expire");
+        }
+        Utilisateur utilisateurActiver =this.utilisateurRepository.findById(validation.getUtilisateur().getId()).orElseThrow(()->new RuntimeException("utilisateur inconnu"));
+        utilisateurActiver.setActif(true);
+        this.utilisateurRepository.save(utilisateurActiver);
     }
 }

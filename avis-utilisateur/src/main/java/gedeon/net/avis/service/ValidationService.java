@@ -32,4 +32,8 @@ public class ValidationService {
         this.validationRepository.save(validation);
         this.notificationService.envoyer(validation);
     }
+
+    public Validation lireEnFonctionDuCode(String code){
+        return this.validationRepository.findByCode(code).orElseThrow(()->new RuntimeException("Votre Code est invalide"));
+    }
 }
