@@ -25,6 +25,7 @@ public class Utilisateur implements UserDetails {
     @Column(name="mot_de_passe")
     private String mdp;
     private String nom;
+
     private String email;
     private Boolean actif=false;
     @OneToOne(cascade = CascadeType.ALL)
