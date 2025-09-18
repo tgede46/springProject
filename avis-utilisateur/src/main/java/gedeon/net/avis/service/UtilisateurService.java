@@ -16,7 +16,7 @@ public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
 
     private final PasswordEncoder passwordEncoder;
-
+    private ValidationService validationService;
     public void inscription(Utilisateur utilisateur){
        if(!utilisateur.getEmail().contains("@")){
            throw new RuntimeException("Votre mail invalide");
@@ -45,6 +45,7 @@ public class UtilisateurService {
         roleUtilisateur.setLibelle(TypeDeRole.UTILISATEUR);
         utilisateur.setRole(roleUtilisateur);
 
-        this.utilisateurRepository.save(utilisateur);
+        utilisateur= this.utilisateurRepository.save(utilisateur);
+        this.validationService.enregistrer(utilisateur);
     }
 }
