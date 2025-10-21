@@ -9,7 +9,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
+@Transactional
 @AllArgsConstructor
 @Service
 public class JwtService {
@@ -81,7 +84,16 @@ public class JwtService {
     }
 
     public Jwt tokenByValue(String value) {
-        return this.jwtRepository.findByValeur(value).orElseThrow(()->
+        return this.jwtRepository.findByValeurAndDesactiveAndExpire(value,false,false).orElseThrow(()->
                 new RuntimeException("token invalide"));
+    }
+
+    public void deconnexion() {
+        Utilisateur utilisateur =(Utilisateur)  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Jwt jwt =this.jwtRepository.findUtilisateurValidToken(utilisateur.getEmail(),false,false)
+                .orElseThrow(()->new RuntimeException("token invalide"));
+        jwt.setExpire(true);
+        jwt.setDesactive(true);
+        this.jwtRepository.save(jwt);
     }
 }

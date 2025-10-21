@@ -28,15 +28,20 @@ public class UtilisateurController {
     private UtilisateurService utilisateurService;
     private JwtService jwtService;
 
-    @PostMapping(path = "/inscription")
+    @PostMapping(path = "inscription")
     public void inscription(@RequestBody Utilisateur utilisateur){
         log.info("Inscription");
         this.utilisateurService.inscription(utilisateur);
     }
 
-    @PostMapping(path = "/activation")
+    @PostMapping(path = "activation")
     public void activation(@RequestBody Map<String,String> activation){
         this.utilisateurService.activation(activation);
+    }
+
+    @PostMapping(path = "deconnexion")
+    public void deconnexion(){
+        this.jwtService.deconnexion();
     }
 
     @PostMapping(path = "connexion")
