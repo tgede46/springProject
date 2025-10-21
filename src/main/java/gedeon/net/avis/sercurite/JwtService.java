@@ -1,6 +1,8 @@
 package gedeon.net.avis.sercurite;
 
+import gedeon.net.avis.entite.Jwt;
 import gedeon.net.avis.entite.Utilisateur;
+import gedeon.net.avis.repository.JwtRepository;
 import gedeon.net.avis.service.UtilisateurService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,10 +22,14 @@ import java.util.function.Function;
 public class JwtService {
     private UtilisateurService utilisateurService;
     private final String SECRET_KEY = "c59491855515985997857282c041132653e1e977738399fe064636d0f3e6bfa0";
+    private JwtRepository jwtRepository;
 
     public Map<String,String> generate(String username){
         Utilisateur utilisateur= (Utilisateur) this.utilisateurService.loadUserByUsername(username);
-        return this.generateJwt(utilisateur);
+        final Map<String, String> jwtMap = this.generateJwt(utilisateur);
+        final Jwt jwt = Jwt.builder().valeur(jwtMap.get("bearer")).desactive(false).expire(false).utilisateur(utilisateur).build();
+        this.jwtRepository.save(jwt);
+        return jwtMap;
     }
 
     public String extractUsername(String token) {
@@ -72,5 +78,10 @@ public class JwtService {
     private Key getKey() {
         final byte[] decoder = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(decoder);
+    }
+
+    public Jwt tokenByValue(String value) {
+        return this.jwtRepository.findByValeur(value).orElseThrow(()->
+                new RuntimeException("token invalide"));
     }
 }

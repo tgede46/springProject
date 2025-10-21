@@ -29,8 +29,8 @@ public class ConfigurationSecuriteApplication {
 
     public ConfigurationSecuriteApplication(BCryptPasswordEncoder bCryptPasswordEncoder, JwtFilter jwtFilter,UserDetailsService userDetailsService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.userDetailsService=userDetailsService;
         this.jwtFilter = jwtFilter;
+        this.userDetailsService=userDetailsService;
     }
 
 
