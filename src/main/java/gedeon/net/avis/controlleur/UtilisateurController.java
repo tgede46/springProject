@@ -1,6 +1,5 @@
 package gedeon.net.avis.controlleur;
 
-
 import gedeon.net.avis.dto.AuthentificationDTO;
 import gedeon.net.avis.entite.Utilisateur;
 import gedeon.net.avis.sercurite.JwtService;
@@ -21,31 +20,31 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping
 public class UtilisateurController {
 
     private AuthenticationManager authenticationManager;
     private UtilisateurService utilisateurService;
     private JwtService jwtService;
 
-    @PostMapping(path = "inscription")
-    public void inscription(@RequestBody Utilisateur utilisateur){
+    @PostMapping(path = "inscription", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void inscription(@RequestBody Utilisateur utilisateur) {
         log.info("Inscription");
         this.utilisateurService.inscription(utilisateur);
     }
 
-    @PostMapping(path = "activation")
-    public void activation(@RequestBody Map<String,String> activation){
+    @PostMapping(path = "activation", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void activation(@RequestBody Map<String, String> activation) {
         this.utilisateurService.activation(activation);
     }
 
     @PostMapping(path = "deconnexion")
-    public void deconnexion(){
+    public void deconnexion() {
         this.jwtService.deconnexion();
     }
 
-    @PostMapping(path = "connexion")
-    public Map<String,String> connexion(@RequestBody AuthentificationDTO authentificationDTO){
+    @PostMapping(path = "connexion", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, String> connexion(@RequestBody AuthentificationDTO authentificationDTO) {
         final Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authentificationDTO.username(), authentificationDTO.password())
         );

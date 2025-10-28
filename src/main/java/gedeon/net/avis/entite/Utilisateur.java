@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,21 +20,23 @@ import java.util.Collections;
 @Entity
 @Table(name = "utilisateur")
 public class Utilisateur implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name="mot_de_passe")
+    @Column(name = "mot_de_passe")
     private String mdp;
     private String nom;
 
     private String email;
-    private Boolean actif=false;
+    private boolean actif = false;
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(("ROLE_" + this.role.getLibelle())));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+this.role.getLibelle()));
     }
 
     @Override
