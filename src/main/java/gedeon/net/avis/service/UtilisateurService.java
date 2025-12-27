@@ -6,8 +6,6 @@ import gedeon.net.avis.entite.Utilisateur;
 import gedeon.net.avis.entite.Validation;
 import gedeon.net.avis.repository.UtilisateurRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
